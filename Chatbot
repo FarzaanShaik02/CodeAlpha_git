@@ -1,0 +1,49 @@
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+import random
+
+lemmatizer = WordNetLemmatizer()
+
+# Define a dictionary of responses
+responses = {
+    'greeting': ['Hello!', 'Hi!', 'Hey!'],
+    'goodbye': ['Goodbye!', 'See you later!', 'Bye!'],
+    'thanks': ['You\'re welcome!', 'No problem!', 'Anytime!'],
+    'unknown': ['I didn\'t understand that.', 'Can you please rephrase?', 'Sorry, I\'m not sure what you mean.']
+}
+
+# Define a function to process user input
+def process_input(input_text):
+    # Tokenize the input text
+    tokens = word_tokenize(input_text)
+
+    # Lemmatize the tokens
+    lemmas = [lemmatizer.lemmatize(token) for token in tokens]
+
+    # Determine the intent of the user
+    intent = None
+    if 'hello' in lemmas or 'hi' in lemmas:
+        intent = 'greeting'
+    elif 'goodbye' in lemmas or 'bye' in lemmas:
+        intent = 'goodbye'
+    elif 'thanks' in lemmas or 'thank' in lemmas:
+        intent = 'thanks'
+    else:
+        intent = 'unknown'
+
+    # Return a response based on the intent
+    return random.choice(responses[intent])
+
+# Create a chatbot function
+def chatbot():
+    print('Welcome to the chatbot!')
+    while True:
+        user_input = input('You: ')
+        response = process_input(user_input)
+        print('Chatbot:', response)
+        if response in responses['goodbye']:
+            break
+
+# Run the chatbot
+chatbot()
